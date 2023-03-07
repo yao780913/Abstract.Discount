@@ -13,9 +13,14 @@ internal class Program
 
         foreach (var p in products) Console.WriteLine($"- {p.Name}  {p.Price:C}");
 
-        Console.WriteLine($"Total: {CheckoutProcess(products.ToArray()):C}");
+        Console.WriteLine($"Total: {CheckoutProcess(products.ToArray(), LoadRules().ToArray()):C}");
 
         Console.ReadLine();
+    }
+
+    private static IEnumerable<RuleBase> LoadRules()
+    {
+        yield return new BuyMoreBoxesDiscountRule(2, 12);
     }
 
 
@@ -28,7 +33,8 @@ internal class Program
     {
         var discounts = new List<Discount>();
 
-        foreach (var rule in rules) discounts.AddRange(rule.Process(products));
+        foreach (var rule in rules) 
+            discounts.AddRange(rule.Process(products));
 
         var amountWithoutDiscount = CheckoutProcess(products);
         decimal totalDiscount = 0;

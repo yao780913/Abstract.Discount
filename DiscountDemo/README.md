@@ -33,3 +33,9 @@ public class Discount
     public decimal Amount { get; set; }
 }
 ```
+
+# 步驟 3, 實作第一個折扣規則
+> 新增 `BuyMoreBoxesDiscountRule` 並繼承 `RuleBase`
+
+* 定義兩個參數 `BoxCount` , `PercentOff`，決定他的箱數與折扣
+* 實作方法 `Process()`
