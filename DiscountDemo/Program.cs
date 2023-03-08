@@ -9,12 +9,36 @@ internal class Program
 {
     private static void Main (string[] args)
     {
-        var products = LoadProducts();
-        if (products == null) throw new ArgumentNullException(nameof(products));
-
-        foreach (var p in products) Console.WriteLine($"- {p.Name}  {p.Price:C}");
-
-        Console.WriteLine($"Total: {CheckoutProcess(products.ToArray(), LoadRules().ToArray()):C}");
+        var cart = new CartContext();
+        var pos = new POS();
+        
+        cart.PurchasedItems.AddRange(LoadProducts());
+        pos.ActiveRules.AddRange(LoadRules());
+        
+        pos.CheckProcess(cart);
+        
+        Console.WriteLine("購買商品");
+        Console.WriteLine("------------------------------------------");
+        foreach (var product in cart.PurchasedItems)
+        {
+            Console.WriteLine($"- {product.Id,02}, [{product.SKU}], {product.Price,8:C}, {product.Name}, {product.TagsValue}");
+        }
+        
+        Console.WriteLine();
+        
+        Console.WriteLine("折扣:");
+        Console.WriteLine("------------------------------------------");
+        foreach (var d in cart.AppliedDiscounts)
+        {
+            Console.WriteLine($"- 折抵 {d.Amount, 8:C}, {d.Rule.Name}, ({d.Rule.Note})");
+            foreach (var p in d.Products)
+            {
+                Console.WriteLine($"  * 符合: {p.Id, 02}, [{p.SKU}], {p.Name}, {p.TagsValue}");
+            }
+        }
+        Console.WriteLine();
+        Console.WriteLine("------------------------------------------");
+        Console.WriteLine($"結帳金額    {cart.TotalPrice:C}");
 
         Console.ReadLine();
     }
@@ -23,32 +47,7 @@ internal class Program
     {
         yield return new BuyMoreBoxesDiscountRule(2, 12);
     }
-
-
-    private static decimal CheckoutProcess (Product[] products)
-    {
-        return products.Sum(p => p.Price);
-    }
-
-    private static decimal CheckoutProcess (Product[] products, RuleBase[] rules)
-    {
-        var discounts = new List<Discount>();
-
-        foreach (var rule in rules) 
-            discounts.AddRange(rule.Process(products));
-
-        var amountWithoutDiscount = CheckoutProcess(products);
-        decimal totalDiscount = 0;
-
-        foreach (var discount in discounts)
-        {
-            totalDiscount += discount.Amount;
-            Console.WriteLine($"- 符合折扣 [{discount.RuleName}], 折抵 {discount.Amount} 元");
-        }
-
-        return amountWithoutDiscount - totalDiscount;
-    }
-
+    
     private static IEnumerable<Product>? LoadProducts ()
     {
         var text = File.ReadAllText(@"products.json", Encoding.UTF8);
