@@ -12,23 +12,23 @@ internal class Program
     private static void Main (string[] args)
     {
         var cart = new CartContext();
-        var pos = new POS();
+        var pos = new POS(LoadRules());
 
         cart.PurchasedItems.AddRange(LoadProducts());
-        pos.ActiveRules.AddRange(LoadRules());
 
         pos.CheckProcess(cart);
 
         Console.WriteLine("購買商品");
         Console.WriteLine("------------------------------------------");
+        
         foreach (var product in cart.PurchasedItems)
             Console.WriteLine(
                 $"- {product.Id,02}, [{product.SKU}], {product.Price,8:C}, {product.Name}, {product.TagsValue}");
 
         Console.WriteLine();
-
         Console.WriteLine("折扣:");
         Console.WriteLine("------------------------------------------");
+        
         foreach (var d in cart.AppliedDiscounts)
         {
             Console.WriteLine($"- 折抵 {d.Amount,8:C}, {d.Rule.Name}, ({d.Rule.Note})");

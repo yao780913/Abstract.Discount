@@ -6,6 +6,11 @@ public class POS
 {
     public readonly List<RuleBase> ActiveRules = new ();
 
+    public POS (IEnumerable<RuleBase> rules)
+    {
+        ActiveRules.AddRange(rules);
+    }
+
     public void CheckProcess (CartContext cart)
     {
         cart.AppliedDiscounts.Clear();

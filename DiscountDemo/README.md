@@ -59,5 +59,45 @@ public class Discount
     * 由店家控制該店家有哪些折扣規則
     * 計算折扣
 
+```csharp
+public class CartContext
+{
+    public readonly List<Discount> AppliedDiscounts = new ();
+    public readonly List<Product> PurchasedItems = new ();
+    public decimal TotalPrice = 0;
+}
+
+public class POS
+{
+    public readonly List<RuleBase> ActiveRules = new ();
+
+    public void CheckProcess (CartContext cart)
+    {
+        cart.AppliedDiscounts.Clear();
+
+        cart.TotalPrice = cart.PurchasedItems.Select(p => p.Price).Sum();
+
+        foreach (var discounts in ActiveRules.Select(rule => rule.Process(cart)))
+        {
+            cart.AppliedDiscounts.AddRange(discounts);
+            cart.TotalPrice -= discounts.Select(d => d.Amount).Sum();
+        }
+    }
+}
+```
+
+> 將職責切開，由 POS 載入所有的折扣規則，並計算後將套用到的折扣規則放回購物車內
+> 
+> 這樣購物車僅需紀錄兩件事情, [1] 我購買的所有商品， [2] 套用到的折扣規則
+
+
 # 步驟 5, 擴充第二個規則
 * 折價券滿 1000 抵用 100，每次交易限用一次
+
+# 大亂鬥 - 挑戰更多折扣規則
+1. 指定商品 (衛生紙) 一次買 6 捲便宜 100 元
+2. 指定商品 (蘋果) 單粒 23 元， 4 粒 88 元
+3. 指定商品 (雞湯塊) 單盒特價 145 元，第二件 5 折
+4. 指定商品 同商品 加 10 元多 1 件 (轉換: 同商品第二件 10 元)
+5. 餐餐超值配, 指定鮮食 + 指定飲料 特價 ( 39元, 49元, 59元 )
+6. 熱銷飲品, 限時優惠! 任 2 箱結帳 88 折!
