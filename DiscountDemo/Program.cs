@@ -44,13 +44,15 @@ internal class Program
 
     private static IEnumerable<RuleBase> LoadRules ()
     {
-        yield return new BuyMoreBoxesDiscountRule(2, 12);
-        yield return new TotalPriceDiscountRule(1000, 100);
+        // yield return new BuyMoreBoxesDiscountRule(2, 12);
+        // yield return new TotalPriceDiscountRule(1000, 100);
+        
+        yield break;
     }
 
     private static IEnumerable<Product>? LoadProducts ()
     {
-        var text = File.ReadAllText(@"products.json", Encoding.UTF8);
+        var text = File.ReadAllText(@"products3.json", Encoding.UTF8);
         foreach (var product in JsonSerializer.Deserialize<Product[]>(text, new JsonSerializerOptions
                  {
                      PropertyNameCaseInsensitive = true

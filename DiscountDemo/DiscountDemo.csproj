@@ -8,9 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="products.json"/>
+        <None Remove="products.json" />
         <Content Include="products.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="products3.json" />
+        <Content Include="products3.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
