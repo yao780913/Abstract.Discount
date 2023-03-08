@@ -8,6 +8,7 @@ using DiscountDemo.DiscountRules;
 internal class Program
 {
     private static int _seed;
+    private const string JsonFilePath = "products5-1.json";
 
     private static void Main (string[] args)
     {
@@ -50,12 +51,22 @@ internal class Program
         yield return new DiscountRule3("雞湯塊", 2, 50);
         yield return new DiscountRule4("同商品加購優惠", 10);
         yield return new DiscountRule6("熱銷飲品", 12);
+        
+        yield return new DiscountRule5(new List<(string food, string drink, decimal price)>
+        {
+            ("超值配鮮食39", "超值配飲料39", 39m),
+            ("超值配鮮食49", "超值配飲料49", 49m),
+            ("超值配鮮食59", "超值配飲料59", 59m),
+            ("超值配鮮食49", "超值配飲料59", 59m),
+            ("超值配鮮食59", "超值配飲料49", 59m),
+        });
         yield break;
     }
 
     private static IEnumerable<Product>? LoadProducts ()
     {
-        var text = File.ReadAllText(@"products3.json", Encoding.UTF8);
+        
+        var text = File.ReadAllText(JsonFilePath, Encoding.UTF8);
         foreach (var product in JsonSerializer.Deserialize<Product[]>(text, new JsonSerializerOptions
                  {
                      PropertyNameCaseInsensitive = true

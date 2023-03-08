@@ -4,7 +4,7 @@ internal class DiscountRule1 : RuleBase
 {
     public string TargetTag { get; }
     public int MinCount { get; }
-    public decimal DiscountAmount { get; } = 0;
+    public decimal DiscountAmount { get; }
 
     public DiscountRule1 (string targetTag, int minBuyCount, decimal discountAmount)
     {
