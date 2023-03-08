@@ -48,6 +48,8 @@ internal class Program
         // yield return new TotalPriceDiscountRule(1000, 100);
         yield return new DiscountRule1("衛生紙", 6, 100);
         yield return new DiscountRule3("雞湯塊", 2, 50);
+        yield return new DiscountRule4("同商品加購優惠", 10);
+        yield return new DiscountRule6("熱銷飲品", 12);
         yield break;
     }
 
