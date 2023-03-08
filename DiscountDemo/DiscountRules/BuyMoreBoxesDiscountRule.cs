@@ -1,4 +1,4 @@
-﻿namespace DiscountDemo;
+﻿namespace DiscountDemo.DiscountRules;
 
 /// <summary>
 /// 任兩箱 88 折

@@ -3,6 +3,7 @@
 using System.Text;
 using System.Text.Json;
 using DiscountDemo;
+using DiscountDemo.DiscountRules;
 
 internal class Program
 {

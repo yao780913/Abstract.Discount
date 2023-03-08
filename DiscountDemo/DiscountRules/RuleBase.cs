@@ -1,4 +1,4 @@
-﻿namespace DiscountDemo;
+﻿namespace DiscountDemo.DiscountRules;
 
 public abstract class RuleBase
 {
