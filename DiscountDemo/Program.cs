@@ -46,7 +46,7 @@ internal class Program
     {
         // yield return new BuyMoreBoxesDiscountRule(2, 12);
         // yield return new TotalPriceDiscountRule(1000, 100);
-        
+        yield return new DiscountRule1("衛生紙", 6, 100);
         yield break;
     }
 
