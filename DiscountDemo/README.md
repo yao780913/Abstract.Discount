@@ -2,6 +2,8 @@
 
 [安德魯的部落格 - 架構面試題 #4 - 抽象化設計；折扣規則的設計機制](https://columns.chicken-house.net/2020/03/10/interview-abstraction/#%E5%95%8F%E9%A1%8C-%E6%8A%98%E6%89%A3%E6%A9%9F%E5%88%B6%E5%88%B0%E5%BA%95%E6%9C%89%E5%A4%9A%E9%9B%A3%E6%90%9E)
 
+[Github Source code](https://github.com/andrew0928/Andrew.DiscountDemo)
+
 # 步驟 2, 定義折扣規則的抽象化介面 `RuleBase`
 
 > **希望不影響到結帳程序 `CheckoutProcess()`**
@@ -41,3 +43,14 @@ public class Discount
 * 實作方法 `Process()`
 
 # 步驟 4, 重構
+
+### 目標
+1. 原本 `RuleBase.Process()` 定義的簽章，只接受 `Product[]` 的參數，對於折扣規則來說，資訊不太足夠
+2. 顯示的資訊稍嫌混亂，想統一在一個地方輸入 `Console.WriteLine()`
+### 做法
+1. **新增 `CartContext`** 購物車
+    * 購買的商品
+    * 套用到的折扣 (由 POS 計算)
+2. 新增 `POS`
+    * 由店家控制該店家有哪些折扣規則
+    * 計算折扣

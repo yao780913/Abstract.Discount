@@ -16,30 +16,25 @@ public class BuyMoreBoxesDiscountRule : RuleBase
         this.Name = $"任 {this.BoxCount} 箱結帳 {100 - percentOff} 折";
         this.Note = "熱銷飲料，限時優惠";
     }
-    
-    public override IEnumerable<Discount> Process(Product[] products)
+
+    public override IEnumerable<Discount> Process (CartContext cart)
     {
         List<Product> matchedProducts = new ();
-        foreach (var product in products)
+        foreach (var p in cart.PurchasedItems)
         {
-            matchedProducts.Add(product);
-            
+            matchedProducts.Add(p);
             if (matchedProducts.Count == this.BoxCount)
             {
                 yield return new Discount
                 {
                     Amount = matchedProducts.Select(p => p.Price).Sum() * PercentOff / 100,
                     Products = matchedProducts.ToArray(),
-                    RuleName = this.Name
+                    Rule = this
                 };
-                
                 matchedProducts.Clear();
             }
+            
+            
         }
-    }
-
-    public override IEnumerable<Discount> Process (CartContext products)
-    {
-        throw new NotImplementedException();
     }
 }
