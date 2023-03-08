@@ -6,4 +6,6 @@ public abstract class RuleBase
     public string Name { get; set; }
     public string Note { get; set; }
     public abstract IEnumerable<Discount> Process (Product[] products);
+
+    public abstract IEnumerable<Discount> Process (CartContext products);
 }

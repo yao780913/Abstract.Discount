@@ -39,3 +39,5 @@ public class Discount
 
 * 定義兩個參數 `BoxCount` , `PercentOff`，決定他的箱數與折扣
 * 實作方法 `Process()`
+
+# 步驟 4, 重構

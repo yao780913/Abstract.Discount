@@ -37,4 +37,9 @@ public class BuyMoreBoxesDiscountRule : RuleBase
             }
         }
     }
+
+    public override IEnumerable<Discount> Process (CartContext products)
+    {
+        throw new NotImplementedException();
+    }
 }
