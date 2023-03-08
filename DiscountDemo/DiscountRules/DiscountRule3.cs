@@ -19,7 +19,7 @@ internal class DiscountRule3 : RuleBase
     public override IEnumerable<Discount> Process (CartContext cart)
     {
         var matched = new List<Product>();
-        foreach (var p in cart.PurchasedItems.Where(pi => pi.Tags.Contains(TargetTag)))
+        foreach (var p in cart.GetVisiblePurchasedItems(ExclusiveTag).Where(pi => pi.Tags.Contains(TargetTag)))
         {
             matched.Add(p);
 

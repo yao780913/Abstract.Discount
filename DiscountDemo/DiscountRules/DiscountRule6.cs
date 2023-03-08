@@ -5,19 +5,20 @@ internal class DiscountRule6 : RuleBase
     public string TargetTag { get; }
     public int PercentOff { get; }
 
-    public DiscountRule6 (string targetTag, int percentOff)
+    public DiscountRule6 (string targetTag, int percentOff, string? exclusiveTag = null)
     {
         TargetTag = targetTag;
         PercentOff = percentOff;
 
         this.Name = "滿件折扣6";
         this.Note = $"熱銷飲品, 限時優惠! 任 2 箱結帳 {100 - PercentOff} 折!";
+        this.ExclusiveTag = exclusiveTag;
     }
 
     public override IEnumerable<Discount> Process (CartContext cart)
     {
         var matched = new List<Product>();
-        foreach (var p in cart.PurchasedItems.Where(pi => pi.Tags.Contains(TargetTag)).OrderByDescending(pi => pi.Price))
+        foreach (var p in cart.GetVisiblePurchasedItems(ExclusiveTag).Where(pi => pi.Tags.Contains(TargetTag)).OrderByDescending(pi => pi.Price))
         {
             matched.Add(p);
 

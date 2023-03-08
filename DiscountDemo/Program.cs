@@ -51,19 +51,19 @@ internal class Program
     {
         // yield return new BuyMoreBoxesDiscountRule(2, 12);
         // yield return new TotalPriceDiscountRule(1000, 100);
-        yield return new DiscountRule1("衛生紙", 6, 100);
+        yield return new DiscountRule1("衛生紙", 6, 100, "ex");
         yield return new DiscountRule3("雞湯塊", 2, 50);
-        yield return new DiscountRule4("同商品加購優惠", 10);
+        yield return new DiscountRule4("同商品加購優惠", 10, "ex");
         yield return new DiscountRule6("熱銷飲品", 12);
         
-        yield return new DiscountRule5(new List<(string food, string drink, decimal price)>
-        {
-            ("超值配鮮食39", "超值配飲料39", 39m),
-            ("超值配鮮食49", "超值配飲料49", 49m),
-            ("超值配鮮食59", "超值配飲料59", 59m),
-            ("超值配鮮食49", "超值配飲料59", 59m),
-            ("超值配鮮食59", "超值配飲料49", 59m),
-        });
+        // yield return new DiscountRule5(new List<(string food, string drink, decimal price)>
+        // {
+        //     ("超值配鮮食39", "超值配飲料39", 39m),
+        //     ("超值配鮮食49", "超值配飲料49", 49m),
+        //     ("超值配鮮食59", "超值配飲料59", 59m),
+        //     ("超值配鮮食49", "超值配飲料59", 59m),
+        //     ("超值配鮮食59", "超值配飲料49", 59m),
+        // });
     }
 
     private static IEnumerable<Product>? LoadProducts ()

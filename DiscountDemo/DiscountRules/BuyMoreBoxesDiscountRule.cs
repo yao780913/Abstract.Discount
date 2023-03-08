@@ -20,7 +20,7 @@ public class BuyMoreBoxesDiscountRule : RuleBase
     public override IEnumerable<Discount> Process (CartContext cart)
     {
         List<Product> matchedProducts = new ();
-        foreach (var p in cart.PurchasedItems)
+        foreach (var p in cart.GetVisiblePurchasedItems(ExclusiveTag))
         {
             matchedProducts.Add(p);
             if (matchedProducts.Count == BoxCount)

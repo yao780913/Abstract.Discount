@@ -6,7 +6,7 @@ internal class DiscountRule1 : RuleBase
     public int MinCount { get; }
     public decimal DiscountAmount { get; }
 
-    public DiscountRule1 (string targetTag, int minBuyCount, decimal discountAmount)
+    public DiscountRule1 (string targetTag, int minBuyCount, decimal discountAmount, string exclusiveTag)
     {
         TargetTag = targetTag;
         MinCount = minBuyCount;
@@ -14,12 +14,13 @@ internal class DiscountRule1 : RuleBase
 
         this.Name = "滿件折扣1";
         this.Note = $"指定商品 ({targetTag}) 一次買 {minBuyCount} 捲便宜 {discountAmount} 元";
+        this.ExclusiveTag = exclusiveTag;
     }
 
     public override IEnumerable<Discount> Process (CartContext cart)
     {
         var matchedProducts = new List<Product>();
-        foreach (var p in cart.PurchasedItems.Where(pi => pi.Tags.Contains(TargetTag)))
+        foreach (var p in cart.GetVisiblePurchasedItems(this.ExclusiveTag).Where(pi => pi.Tags.Contains(TargetTag)))
         {
             matchedProducts.Add(p);
 

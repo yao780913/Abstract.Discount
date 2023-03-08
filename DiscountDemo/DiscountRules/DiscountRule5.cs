@@ -4,17 +4,18 @@ internal class DiscountRule5 : RuleBase
 {
     public IEnumerable<(string food, string drink, decimal price)> DiscountTable { get; }
 
-    public DiscountRule5 (IEnumerable<(string food, string drink, decimal price)> discountTable)
+    public DiscountRule5 (IEnumerable<(string food, string drink, decimal price)> discountTable, string? exclusiveTag = null)
     {
         DiscountTable = discountTable;
         
         this.Name = "配對折扣";
         this.Note = "餐餐超值配 39/49/59 優惠";
+        this.ExclusiveTag = exclusiveTag;
     }
     
     public override IEnumerable<Discount> Process (CartContext cart)
     {
-        var purchasedItems = new List<Product>(cart.PurchasedItems);
+        var purchasedItems = new List<Product>(cart.GetVisiblePurchasedItems(ExclusiveTag));
 
         foreach (var (food, drink, price) in DiscountTable)
         {

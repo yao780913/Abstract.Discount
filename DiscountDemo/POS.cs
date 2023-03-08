@@ -16,10 +16,22 @@ public class POS
         cart.AppliedDiscounts.Clear();
 
         cart.TotalPrice = cart.PurchasedItems.Select(p => p.Price).Sum();
-
-        foreach (var discounts in ActiveRules.Select(rule => rule.Process(cart)))
+        foreach (var rule in ActiveRules)
         {
+            var discounts = rule.Process(cart);
             cart.AppliedDiscounts.AddRange(discounts);
+
+            if (rule.ExclusiveTag != null)
+            {
+                foreach (var d in discounts)
+                {
+                    foreach (var p in d.Products)
+                    {
+                        p.Tags.Add(rule.ExclusiveTag);
+                    }
+                }
+            }
+            
             cart.TotalPrice -= discounts.Select(d => d.Amount).Sum();
         }
     }
