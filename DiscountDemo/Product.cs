@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace DiscountDemo;
+﻿namespace DiscountDemo;
 
 public class Product
 {
@@ -14,11 +12,10 @@ public class Product
     {
         get
         {
-            if (this.Tags == null || this.Tags.Count == 0)
+            if (Tags == null || Tags.Count == 0)
                 return string.Empty;
 
-            return string.Join(",", this.Tags.Select(t => "#" + t));
+            return string.Join(",", Tags.Select(t => "#" + t));
         }
     }
-        
 }

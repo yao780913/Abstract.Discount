@@ -7,35 +7,34 @@ using DiscountDemo.DiscountRules;
 
 internal class Program
 {
+    private static int _seed;
+
     private static void Main (string[] args)
     {
         var cart = new CartContext();
         var pos = new POS();
-        
+
         cart.PurchasedItems.AddRange(LoadProducts());
         pos.ActiveRules.AddRange(LoadRules());
-        
+
         pos.CheckProcess(cart);
-        
+
         Console.WriteLine("購買商品");
         Console.WriteLine("------------------------------------------");
         foreach (var product in cart.PurchasedItems)
-        {
-            Console.WriteLine($"- {product.Id,02}, [{product.SKU}], {product.Price,8:C}, {product.Name}, {product.TagsValue}");
-        }
-        
+            Console.WriteLine(
+                $"- {product.Id,02}, [{product.SKU}], {product.Price,8:C}, {product.Name}, {product.TagsValue}");
+
         Console.WriteLine();
-        
+
         Console.WriteLine("折扣:");
         Console.WriteLine("------------------------------------------");
         foreach (var d in cart.AppliedDiscounts)
         {
-            Console.WriteLine($"- 折抵 {d.Amount, 8:C}, {d.Rule.Name}, ({d.Rule.Note})");
-            foreach (var p in d.Products)
-            {
-                Console.WriteLine($"  * 符合: {p.Id, 02}, [{p.SKU}], {p.Name}, {p.TagsValue}");
-            }
+            Console.WriteLine($"- 折抵 {d.Amount,8:C}, {d.Rule.Name}, ({d.Rule.Note})");
+            foreach (var p in d.Products) Console.WriteLine($"  * 符合: {p.Id,02}, [{p.SKU}], {p.Name}, {p.TagsValue}");
         }
+
         Console.WriteLine();
         Console.WriteLine("------------------------------------------");
         Console.WriteLine($"結帳金額    {cart.TotalPrice:C}");
@@ -43,17 +42,23 @@ internal class Program
         Console.ReadLine();
     }
 
-    private static IEnumerable<RuleBase> LoadRules()
+    private static IEnumerable<RuleBase> LoadRules ()
     {
         yield return new BuyMoreBoxesDiscountRule(2, 12);
+        yield return new TotalPriceDiscountRule(1000, 100);
     }
-    
+
     private static IEnumerable<Product>? LoadProducts ()
     {
         var text = File.ReadAllText(@"products.json", Encoding.UTF8);
-        return JsonSerializer.Deserialize<Product[]>(text, new JsonSerializerOptions
+        foreach (var product in JsonSerializer.Deserialize<Product[]>(text, new JsonSerializerOptions
+                 {
+                     PropertyNameCaseInsensitive = true
+                 })!)
         {
-            PropertyNameCaseInsensitive = true
-        });
+            _seed++;
+            product.Id = _seed;
+            yield return product;
+        }
     }
 }

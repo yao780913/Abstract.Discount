@@ -37,6 +37,7 @@ public class Discount
 ```
 
 # 步驟 3, 實作第一個折扣規則
+
 > 新增 `BuyMoreBoxesDiscountRule` 並繼承 `RuleBase`
 
 * 定義兩個參數 `BoxCount` , `PercentOff`，決定他的箱數與折扣
@@ -45,12 +46,18 @@ public class Discount
 # 步驟 4, 重構
 
 ### 目標
+
 1. 原本 `RuleBase.Process()` 定義的簽章，只接受 `Product[]` 的參數，對於折扣規則來說，資訊不太足夠
 2. 顯示的資訊稍嫌混亂，想統一在一個地方輸入 `Console.WriteLine()`
+
 ### 做法
+
 1. **新增 `CartContext`** 購物車
     * 購買的商品
     * 套用到的折扣 (由 POS 計算)
 2. 新增 `POS`
     * 由店家控制該店家有哪些折扣規則
     * 計算折扣
+
+# 步驟 5, 擴充第二個規則
+* 折價券滿 1000 抵用 100，每次交易限用一次
