@@ -2,26 +2,30 @@
 
 using System.Text;
 using System.Text.Json;
-using DiscountDemo;
 using DiscountDemo.DiscountRules;
+
+namespace DiscountDemo;
 
 internal class Program
 {
     private static int _seed;
-    private const string JsonFilePath = "products5-1.json";
+    private const string JsonFilePath = "products4.json";
 
     private static void Main (string[] args)
     {
-        var cart = new CartContext();
+        var cart = new CartContext(LoadProducts());
         var pos = new POS(LoadRules());
-
-        cart.PurchasedItems.AddRange(LoadProducts());
 
         pos.CheckProcess(cart);
 
+        ShowMessage(cart);
+    }
+
+    private static void ShowMessage (CartContext cart)
+    {
         Console.WriteLine("購買商品");
         Console.WriteLine("------------------------------------------");
-        
+
         foreach (var product in cart.PurchasedItems)
             Console.WriteLine(
                 $"- {product.Id,02}, [{product.SKU}], {product.Price,8:C}, {product.Name}, {product.TagsValue}");
@@ -29,7 +33,7 @@ internal class Program
         Console.WriteLine();
         Console.WriteLine("折扣:");
         Console.WriteLine("------------------------------------------");
-        
+
         foreach (var d in cart.AppliedDiscounts)
         {
             Console.WriteLine($"- 折抵 {d.Amount,8:C}, {d.Rule.Name}, ({d.Rule.Note})");
@@ -60,7 +64,6 @@ internal class Program
             ("超值配鮮食49", "超值配飲料59", 59m),
             ("超值配鮮食59", "超值配飲料49", 59m),
         });
-        yield break;
     }
 
     private static IEnumerable<Product>? LoadProducts ()
